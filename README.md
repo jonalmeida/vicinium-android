@@ -1,1 +1,1 @@
-# Vicinum (Android client)
+# Vicinium (Android client)

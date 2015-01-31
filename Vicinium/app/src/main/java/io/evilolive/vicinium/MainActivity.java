@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        locationHandler = new LocationHandler(this);
+        locationHandler = LocationHandler.getInstance(this);
         timer = new Timer();
         timer.scheduleAtFixedRate(new LocationUpdater(locationHandler), 0, 60000);
     }

@@ -10,6 +10,7 @@ import android.util.Log;
 
 public class LocationHandler implements LocationListener {
     private static final String LOCATION_HANDLER = LocationHandler.class.toString();
+    private static LocationHandler ourInstance;
 
     private Context context;
     private Location location;
@@ -20,6 +21,13 @@ public class LocationHandler implements LocationListener {
         this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         setLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 1.0f, this);
+    }
+
+    public static LocationHandler getInstance(Context context) {
+        if (ourInstance == null) {
+            ourInstance = new LocationHandler(context);
+        }
+        return ourInstance;
     }
 
     @Override

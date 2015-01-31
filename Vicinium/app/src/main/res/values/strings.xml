@@ -4,5 +4,6 @@
     <string name="app_name">Vicinium</string>
     <string name="hello_world">Fuck my world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_message_list">Conversation</string>
 
 </resources>

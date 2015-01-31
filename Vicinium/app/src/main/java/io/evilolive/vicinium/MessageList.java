@@ -1,12 +1,14 @@
 package io.evilolive.vicinium;
 
 import android.app.DownloadManager;
+import android.database.DataSetObserver;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,10 +73,20 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
     }
 
     private void createListView() {
-        ListView mainListView = (ListView) findViewById(R.id.listViewAllMessages);
+        final ListView mainListView = (ListView) findViewById(R.id.listViewAllMessages);
 
         arrayList = new ArrayList<>();
         adapter = new MessageAdapter(this, R.layout.list_item_message, arrayList);
+
+        mainListView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                mainListView.setSelection(adapter.getCount() - 1);
+            }
+        });
 
         mainListView.setAdapter(adapter);
     }
@@ -111,5 +123,6 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
     public void onClick(View v) {
         MessageHandler messageHandler = new MessageHandler(MessageList.this, 20, 100);
         messageHandler.sendMessage(editText.getText().toString());
+        editText.setText("");
     }
 }

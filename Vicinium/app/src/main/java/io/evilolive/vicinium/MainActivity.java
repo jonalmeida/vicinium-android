@@ -50,18 +50,7 @@ public class MainActivity extends ActionBarActivity {
                 createMessageActivityList(v);
             }
         });
-/*
-        Button button = (Button) findViewById(R.id.temp);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                double latitude = Math.floor(location.getLatitude() * 10000);
-                double longitude = Math.floor(location.getLongitude() * 10000);
-                Log.d("testing", " val = " + latitude + " " + longitude);
 
-            }
-        });
-*/
         locationHandler = LocationHandler.getInstance(this);
         timer = new Timer();
         timer.scheduleAtFixedRate(new LocationUpdater(locationHandler), 0, 60000);

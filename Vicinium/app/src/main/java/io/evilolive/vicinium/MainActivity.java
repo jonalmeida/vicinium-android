@@ -3,8 +3,10 @@ package io.evilolive.vicinium;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
     // Location stuff
     LocationHandler locationHandler;
     Timer timer;
+    Location location;
 
     private static final String PREFS_NAME = "ListOfUsers";
 
@@ -33,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
 
         usernameField = (TextView) findViewById(R.id.usernameField);
         signinButton = (Button) findViewById(R.id.signinButton);
+        location = LocationHandler.getInstance(this).getLocation();
 
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +50,18 @@ public class MainActivity extends ActionBarActivity {
                 createMessageActivityList(v);
             }
         });
+/*
+        Button button = (Button) findViewById(R.id.temp);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double latitude = Math.floor(location.getLatitude() * 10000);
+                double longitude = Math.floor(location.getLongitude() * 10000);
+                Log.d("testing", " val = " + latitude + " " + longitude);
 
+            }
+        });
+*/
         locationHandler = LocationHandler.getInstance(this);
         timer = new Timer();
         timer.scheduleAtFixedRate(new LocationUpdater(locationHandler), 0, 60000);

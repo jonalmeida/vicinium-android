@@ -2,6 +2,7 @@ package io.evilolive.vicinium;
 
 import android.app.DownloadManager;
 import android.database.DataSetObserver;
+import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
     ArrayList<Message> arrayList;
     MessageAdapter adapter;
     EditText editText;
+    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,11 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
         Button sendButton = (Button) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(this);
 
-        int latitude = 20;
-        int longitude = 100;
+        location = LocationHandler.getInstance(this).getLocation();
+        RoomCoordinates roomCoordinates = new RoomCoordinates(location);
+
         Firebase home = new Firebase("https://dazzling-torch-5552.firebaseio.com/");
-        chatroomRef =  home.child(Integer.toString(latitude)).child(Integer.toString(longitude));
+        chatroomRef =  home.child(Integer.toString(roomCoordinates.latitude)).child(Integer.toString(roomCoordinates.longitude));
 
         chatroomRef.addChildEventListener(this);
     }
@@ -121,8 +124,23 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
 
     @Override
     public void onClick(View v) {
-        MessageHandler messageHandler = new MessageHandler(MessageList.this, 20, 100);
+        RoomCoordinates coordinates = new RoomCoordinates(location);
+        MessageHandler messageHandler = new MessageHandler(MessageList.this, coordinates.latitude, coordinates.longitude);
         messageHandler.sendMessage(editText.getText().toString());
         editText.setText("");
+    }
+
+
+    class RoomCoordinates {
+        public final int latitude ;
+        public final int longitude;
+
+        RoomCoordinates(Location location) {
+            this.latitude = (int) Math.floor(location.getLatitude() * 1000);
+            this.longitude =  (int) Math.floor(location.getLongitude() * 1000);
+        }
+
+
+
     }
 }

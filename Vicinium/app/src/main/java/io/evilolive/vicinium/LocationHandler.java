@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class LocationHandler implements LocationListener {
     private static final String LOCATION_HANDLER = LocationHandler.class.toString();
-    private static LocationHandler ourInstance;
+    private static LocationHandler ourInstance = null;
 
     private Context context;
     private Location location;

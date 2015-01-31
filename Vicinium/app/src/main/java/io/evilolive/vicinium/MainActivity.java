@@ -1,5 +1,6 @@
 package io.evilolive.vicinium;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -41,6 +42,12 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public static String getUsername(Context context) {
+        SharedPreferences preference = context.getSharedPreferences(PREFS_NAME, 0);
+        String username = preference.getString("username", null);
+
+        return username;
+    }
 
     @Override
     protected void onPause() {

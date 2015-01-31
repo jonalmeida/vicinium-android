@@ -1,5 +1,6 @@
 package io.evilolive.vicinium;
 
+import android.app.DownloadManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 
 import java.util.ArrayList;
 
@@ -78,7 +80,8 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    public void onChildAdded(DataSnapshot snapshot, String s) {
+        DataSnapshot dataSnapshot= snapshot.getChildren().iterator().next();
         Message message = new Message(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
         adapter.add(message);
 

@@ -20,7 +20,7 @@ public class MessageHandler {
     public MessageHandler(Context context, int latitude, int longitude) {
         Firebase.setAndroidContext(context);
         Firebase home = new Firebase("https://dazzling-torch-5552.firebaseio.com/");
-        chatroomRef = home.child(Integer.toString(latitude)).child(Integer.toString(longitude));
+        chatroomRef = home.child(Integer.toString(latitude)).child(Integer.toString(longitude)).push();
 
         username = MainActivity.getUsername(context);
 

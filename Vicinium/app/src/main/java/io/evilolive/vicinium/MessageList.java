@@ -2,21 +2,47 @@ package io.evilolive.vicinium;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 
 
-public class MessageList extends ActionBarActivity {
+public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener {
+
+    Firebase chatroomRef;
+    ArrayList<Message> arrayList;
+    MessageAdapter adapter;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Firebase.setAndroidContext(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
         createListView();
+
+        editText = (EditText) findViewById(R.id.enterText);
+        Button sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(this);
+
+        int latitude = 20;
+        int longitude = 100;
+        Firebase home = new Firebase("https://dazzling-torch-5552.firebaseio.com/");
+        chatroomRef =  home.child(Integer.toString(latitude)).child(Integer.toString(longitude));
+
+        chatroomRef.addChildEventListener(this);
     }
 
 
@@ -45,13 +71,42 @@ public class MessageList extends ActionBarActivity {
     private void createListView() {
         ListView mainListView = (ListView) findViewById(R.id.listViewAllMessages);
 
-        ArrayList<Message> arrayList = new ArrayList<>();
-        arrayList.add(new Message("John Doe", "Hello"));
-        arrayList.add(new Message("Jane Doe", "Hi!", MessageType.Personal));
-        arrayList.add(new Message("Steve Doe", "Fuck off you bitches", MessageType.Default));
-
-        MessageAdapter adapter = new MessageAdapter(this, R.layout.list_item_message, arrayList);
+        arrayList = new ArrayList<>();
+        adapter = new MessageAdapter(this, R.layout.list_item_message, arrayList);
 
         mainListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Message message = new Message(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
+        adapter.add(message);
+
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        MessageHandler messageHandler = new MessageHandler(MessageList.this, 20, 100);
+        messageHandler.sendMessage(editText.getText().toString());
     }
 }

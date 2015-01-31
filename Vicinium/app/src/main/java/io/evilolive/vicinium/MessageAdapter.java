@@ -40,7 +40,8 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         labelView.setText(messageList.get(position).getName());
         valueView.setText(messageList.get(position).getMessage());
 
-        if (messageList.get(position).getType() == MessageType.Personal) {
+        if (messageList.get(position).getType() == MessageType.Personal ||
+                messageList.get(position).getName().equals(MainActivity.getUsername(context))) {
             labelView.setBackgroundColor(Color.parseColor("#673AB7"));
             valueView.setBackgroundColor(Color.parseColor("#673AB7"));
         }

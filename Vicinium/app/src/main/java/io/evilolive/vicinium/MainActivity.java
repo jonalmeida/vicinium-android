@@ -1,19 +1,48 @@
 package io.evilolive.vicinium;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    TextView usernameField;
+    Button signinButton;
+
+    private static final String PREFS_NAME = "ListOfUsers";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        usernameField = (TextView) findViewById(R.id.usernameField);
+        signinButton = (Button) findViewById(R.id.signinButton);
+
+        signinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences usernamePref = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = usernamePref.edit();
+                editor.putString("username", usernameField.getText().toString());
+
+                editor.commit();
+            }
+        });
+
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -24,12 +53,8 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

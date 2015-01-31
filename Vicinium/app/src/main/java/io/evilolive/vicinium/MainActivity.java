@@ -1,5 +1,6 @@
 package io.evilolive.vicinium;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class MainActivity extends ActionBarActivity {
                 editor.putString("username", usernameField.getText().toString());
 
                 editor.commit();
+
+                createMessageActivityList(v);
             }
         });
 
@@ -60,5 +63,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createMessageActivityList(View view) {
+        Intent intent = new Intent(this, MessageList.class);
+        startActivity(intent);
     }
 }

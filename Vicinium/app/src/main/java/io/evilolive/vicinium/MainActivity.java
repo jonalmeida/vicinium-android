@@ -11,11 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Timer;
+
 
 public class MainActivity extends ActionBarActivity {
 
+    // UI login stuff
     TextView usernameField;
     Button signinButton;
+
+    // Location stuff
+    LocationHandler locationHandler;
+    Timer timer;
 
     private static final String PREFS_NAME = "ListOfUsers";
 
@@ -40,18 +47,21 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-    }
-
-    public static String getUsername(Context context) {
-        SharedPreferences preference = context.getSharedPreferences(PREFS_NAME, 0);
-        String username = preference.getString("username", null);
-
-        return username;
+        locationHandler = new LocationHandler(this);
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new LocationUpdater(locationHandler), 0, 60000);
     }
 
     @Override
     protected void onPause() {
+        locationHandler.removeUpdates();
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        locationHandler.resumeUpdates();
+        super.onResume();
     }
 
     @Override
@@ -75,5 +85,12 @@ public class MainActivity extends ActionBarActivity {
     private void createMessageActivityList(View view) {
         Intent intent = new Intent(this, MessageList.class);
         startActivity(intent);
+    }
+
+    public static String getUsername(Context context) {
+        SharedPreferences preference = context.getSharedPreferences(PREFS_NAME, 0);
+        String username = preference.getString("username", null);
+
+        return username;
     }
 }

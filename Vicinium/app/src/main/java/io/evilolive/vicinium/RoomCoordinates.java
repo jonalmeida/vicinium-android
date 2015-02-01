@@ -2,9 +2,6 @@ package io.evilolive.vicinium;
 
 import android.location.Location;
 
-/**
- * Created by himanshu on 01/02/15.
- */
 public class RoomCoordinates {
     public final int latitude ;
     public final int longitude;

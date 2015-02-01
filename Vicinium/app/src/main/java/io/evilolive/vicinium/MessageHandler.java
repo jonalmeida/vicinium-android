@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class MessageHandler {
     public void sendMessage(String message) {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put(username, message);
+        data.put("time", ServerValue.TIMESTAMP);
         chatroomRef.updateChildren(data, new Firebase.CompletionListener() {
 
             @Override

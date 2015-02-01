@@ -22,9 +22,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener, MyListener {
+
+    public static final long LOGIN_TIME = System.currentTimeMillis();
 
     Firebase chatroomRef;
     ArrayList<Message> arrayList;
@@ -97,16 +100,17 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
 
     @Override
     public void onChildAdded(DataSnapshot snapshot, String s) {
-        Log.d("testing", "child added");
         DataSnapshot dataSnapshot= snapshot.getChildren().iterator().next();
-        Message message = new Message(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
-        adapter.add(message);
+        Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
 
+        if ((long)map.get("time") > MessageList.loginTime) {
+            Message message = new Message(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
+            adapter.add(message);
+        }
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        Log.d("testing", "new child");
     }
 
     @Override

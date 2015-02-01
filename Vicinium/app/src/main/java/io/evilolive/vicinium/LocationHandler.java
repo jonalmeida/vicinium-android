@@ -1,5 +1,6 @@
 package io.evilolive.vicinium;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,6 +12,7 @@ import android.util.Log;
 public class LocationHandler implements LocationListener {
     private static final String LOCATION_HANDLER = LocationHandler.class.toString();
     private static LocationHandler ourInstance = null;
+    public static MyListener listener = null;
 
     private Context context;
     private Location location;
@@ -24,6 +26,10 @@ public class LocationHandler implements LocationListener {
     }
 
     public static LocationHandler getInstance(Context context) {
+        Activity activity = (Activity) context;
+        if (listener == null && activity.getLocalClassName().equals("MessageList")) {
+            listener = (MyListener) activity;
+        }
         if (ourInstance == null) {
             ourInstance = new LocationHandler(context);
         }
@@ -33,7 +39,16 @@ public class LocationHandler implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.v(LOCATION_HANDLER, "Location changed:\n lat: " + location.getLatitude() + "\n lon: " + location.getLongitude());
+        RoomCoordinates oldCoordinates = new RoomCoordinates(this.location);
+        RoomCoordinates newCoordinates = new RoomCoordinates(location);
+
+        boolean diff = ((newCoordinates.latitude - oldCoordinates.latitude) == 0) && ( (newCoordinates.longitude - oldCoordinates.longitude) == 0);
+
         setLocation(location);
+        if (listener != null && (!diff)) {
+            listener.updateFirebaseForRead(location);
+            listener.updateFirebaseForWrite(location);
+        }
     }
 
     @Override

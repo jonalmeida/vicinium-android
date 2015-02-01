@@ -24,13 +24,14 @@ import com.firebase.client.Query;
 import java.util.ArrayList;
 
 
-public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener {
+public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener, MyListener {
 
     Firebase chatroomRef;
     ArrayList<Message> arrayList;
     MessageAdapter adapter;
     EditText editText;
     Location location;
+    Firebase home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
         location = LocationHandler.getInstance(this).getLocation();
         RoomCoordinates roomCoordinates = new RoomCoordinates(location);
 
-        Firebase home = new Firebase("https://dazzling-torch-5552.firebaseio.com/");
+        home = new Firebase("https://dazzling-torch-5552.firebaseio.com/");
         chatroomRef =  home.child(Integer.toString(roomCoordinates.latitude)).child(Integer.toString(roomCoordinates.longitude));
 
         chatroomRef.addChildEventListener(this);
@@ -96,6 +97,7 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
 
     @Override
     public void onChildAdded(DataSnapshot snapshot, String s) {
+        Log.d("testing", "child added");
         DataSnapshot dataSnapshot= snapshot.getChildren().iterator().next();
         Message message = new Message(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
         adapter.add(message);
@@ -104,7 +106,7 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+        Log.d("testing", "new child");
     }
 
     @Override
@@ -130,17 +132,25 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
         editText.setText("");
     }
 
+    @Override
+    public void updateFirebaseForRead(Location location) {
+        if (chatroomRef != null) {
+            chatroomRef.removeEventListener(this);
+        }
+        RoomCoordinates roomCoordinates = new RoomCoordinates(location);
 
-    class RoomCoordinates {
-        public final int latitude ;
-        public final int longitude;
+        Firebase newChatroomRef =  home.child(Integer.toString(roomCoordinates.latitude)).child(Integer.toString(roomCoordinates.longitude));
 
-        RoomCoordinates(Location location) {
-            this.latitude = (int) Math.floor(location.getLatitude() * 1000);
-            this.longitude =  (int) Math.floor(location.getLongitude() * 1000);
+        newChatroomRef.addChildEventListener(this);
+    }
+
+    @Override
+    public void updateFirebaseForWrite(Location location) {
+        if (chatroomRef != null) {
+            chatroomRef.removeEventListener(this);
         }
 
-
-
+        this.location = location;
     }
+
 }

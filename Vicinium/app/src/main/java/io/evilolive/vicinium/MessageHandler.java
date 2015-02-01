@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class MessageHandler {
 
-    private static final String TAG = "MessageHandler";
+    private static final String TAG = MessageHandler.class.toString();
 
     Firebase chatroomRef;
     String username;

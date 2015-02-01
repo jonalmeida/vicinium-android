@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MessageAdapter extends ArrayAdapter<Message> {
+    private static final String TAG = MessageAdapter.class.toString();
     private Context context;
     private List<Message> messageList;
 

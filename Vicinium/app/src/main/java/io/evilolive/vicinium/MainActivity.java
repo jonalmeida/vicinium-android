@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dd.processbutton.iml.ActionProcessButton;
+
 import java.util.Timer;
 
 
@@ -35,10 +37,13 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         usernameField = (TextView) findViewById(R.id.usernameField);
-        signinButton = (Button) findViewById(R.id.signinButton);
+//        signinButton = (Button) findViewById(R.id.signinButton);
         location = LocationHandler.getInstance(this).getLocation();
 
-        signinButton.setOnClickListener(new View.OnClickListener() {
+        ActionProcessButton btnSignIn = (ActionProcessButton) findViewById(R.id.btnSignIn);
+        btnSignIn.setMode(ActionProcessButton.Mode.PROGRESS);
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences usernamePref = getSharedPreferences(PREFS_NAME, 0);
@@ -68,23 +73,6 @@ public class MainActivity extends ActionBarActivity {
         super.onResume();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void createMessageActivityList(View view) {
         Intent intent = new Intent(this, MessageList.class);

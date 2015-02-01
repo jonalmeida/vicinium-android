@@ -29,22 +29,40 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        // 2. Get rowView from inflater
-        View rowView = inflater.inflate(R.layout.list_item_message, parent, false);
+        Message previousMessage = null, currentMessage = null;
+        if (position-1 >= 0)
+            previousMessage = messageList.get(position-1);
+
+        currentMessage = messageList.get(position);
+
+        View rowView;
+
+        if (currentMessage.getType() == MessageType.Personal ||
+                currentMessage.getName().equals(MainActivity.getUsername(context))) {
+
+            if (previousMessage != null && previousMessage.getName().equals(MainActivity.getUsername(context))) {
+                rowView = inflater.inflate(R.layout.list_item_personal_only, parent, false);
+            } else {
+                rowView = inflater.inflate(R.layout.list_item_personal_message, parent, false);
+            }
+        } else {
+            if (previousMessage != null && currentMessage.getName().equals(previousMessage.getName())) {
+                rowView = inflater.inflate(R.layout.list_item_message_only, parent, false);
+            } else {
+                rowView = inflater.inflate(R.layout.list_item_message, parent, false);
+            }
+        }
 
         // 3. Get the two text view from the rowView
+//        if(rowView. )
         TextView labelView = (TextView) rowView.findViewById(R.id.messageName);
+        if (labelView != null)
+            labelView.setText(messageList.get(position).getName());
+
+
         TextView valueView = (TextView) rowView.findViewById(R.id.messageText);
-
-        // 4. Set the text for textView
-        labelView.setText(messageList.get(position).getName());
-        valueView.setText(messageList.get(position).getMessage());
-
-        if (messageList.get(position).getType() == MessageType.Personal ||
-                messageList.get(position).getName().equals(MainActivity.getUsername(context))) {
-            labelView.setBackgroundColor(Color.parseColor("#673AB7"));
-            valueView.setBackgroundColor(Color.parseColor("#673AB7"));
-        }
+        if (valueView != null)
+            valueView.setText(messageList.get(position).getMessage());
 
         // 5. return rowView
         return rowView;

@@ -4,6 +4,7 @@ public class Message {
     private String name;
     private String message;
     private MessageType type;
+    private long timestamp;
 
 
     public Message(String name, String message) {
@@ -18,6 +19,14 @@ public class Message {
         this.name = name;
         this.message = message;
         this.type = type;
+    }
+
+    public Message(String name, String message, MessageType type, long timestamp) {
+        super();
+        this.name = name;
+        this.message = message;
+        this.type = type;
+        this.timestamp = timestamp;
     }
 
     public String getName() {
@@ -42,5 +51,13 @@ public class Message {
 
     public void setType(MessageType type) {
         this.type = type;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

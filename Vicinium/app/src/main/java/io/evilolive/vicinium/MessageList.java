@@ -130,8 +130,10 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
     public void onClick(View v) {
         RoomCoordinates coordinates = new RoomCoordinates(location);
         MessageHandler messageHandler = new MessageHandler(MessageList.this, coordinates.latitude, coordinates.longitude);
-        messageHandler.sendMessage(editText.getText().toString());
-        editText.setText("");
+        if (!editText.getText().toString().isEmpty()) {
+            messageHandler.sendMessage(editText.getText().toString());
+            editText.setText("");
+        }
     }
 
     @Override

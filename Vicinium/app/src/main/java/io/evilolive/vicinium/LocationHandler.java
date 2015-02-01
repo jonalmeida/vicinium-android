@@ -10,9 +10,9 @@ import android.os.Looper;
 import android.util.Log;
 
 public class LocationHandler implements LocationListener {
-    private static final String TAG = LocationHandler.class.toString();
+    private static final String LOCATION_HANDLER = LocationHandler.class.toString();
     private static LocationHandler ourInstance = null;
-    public static OnRoomChangeListener listener = null;
+    public static MyListener listener = null;
 
     private Context context;
     private Location location;
@@ -28,7 +28,7 @@ public class LocationHandler implements LocationListener {
     public static LocationHandler getInstance(Context context) {
         Activity activity = (Activity) context;
         if (listener == null && activity.getLocalClassName().equals("MessageList")) {
-            listener = (OnRoomChangeListener) activity;
+            listener = (MyListener) activity;
         }
         if (ourInstance == null) {
             ourInstance = new LocationHandler(context);
@@ -38,7 +38,7 @@ public class LocationHandler implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.v(TAG, "Location changed:\n lat: " + location.getLatitude() + "\n lon: " + location.getLongitude());
+        Log.v(LOCATION_HANDLER, "Location changed:\n lat: " + location.getLatitude() + "\n lon: " + location.getLongitude());
         RoomCoordinates oldCoordinates = new RoomCoordinates(this.location);
         RoomCoordinates newCoordinates = new RoomCoordinates(location);
 
@@ -53,17 +53,17 @@ public class LocationHandler implements LocationListener {
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-        Log.v(TAG, "Status changed, but we do nothing...");
+        Log.v(LOCATION_HANDLER, "Status changed, but we do nothing...");
     }
 
     @Override
     public void onProviderEnabled(String s) {
-        Log.v(TAG, "Provider enabled, but we do nothing...");
+        Log.v(LOCATION_HANDLER, "Provider enabled, but we do nothing...");
     }
 
     @Override
     public void onProviderDisabled(String s) {
-        Log.v(TAG, "Provider disabled, but we do nothing...");
+        Log.v(LOCATION_HANDLER, "Provider disabled, but we do nothing...");
     }
 
     public void sampleLocation() {

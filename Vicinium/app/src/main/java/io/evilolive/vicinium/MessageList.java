@@ -1,13 +1,16 @@
 package io.evilolive.vicinium;
 
+import android.app.DownloadManager;
 import android.database.DataSetObserver;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -16,13 +19,14 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 
-public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener, OnRoomChangeListener {
-    private static final String TAG = MessageList.class.toString();
+public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener, MyListener {
+
     public static long LOGIN_TIME;
 
     Firebase chatroomRef;
@@ -153,6 +157,7 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
         if (chatroomRef != null) {
             chatroomRef.removeEventListener(this);
         }
+
         this.location = location;
     }
 

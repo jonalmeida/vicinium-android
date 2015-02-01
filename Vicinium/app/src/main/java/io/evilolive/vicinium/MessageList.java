@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class MessageList extends ActionBarActivity implements ChildEventListener, View.OnClickListener, MyListener {
 
-    public static final long LOGIN_TIME = System.currentTimeMillis();
+    public static long LOGIN_TIME;// = System.currentTimeMillis();
 
     Firebase chatroomRef;
     ArrayList<Message> arrayList;
@@ -42,6 +42,8 @@ public class MessageList extends ActionBarActivity implements ChildEventListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
         createListView();
+
+        LOGIN_TIME = System.currentTimeMillis();
 
         editText = (EditText) findViewById(R.id.enterText);
         Button sendButton = (Button) findViewById(R.id.sendButton);
